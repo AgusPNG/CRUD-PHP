@@ -6,7 +6,7 @@
 }
 
 body{
-    background-image: url("img/bookshelf.jpg");
+    background-image: url("img/bookshelf_bl.jpg");
     background-size: 30%;
     text-align: center;
     font-family: 'KomikaAxis';
@@ -15,6 +15,35 @@ body{
     font-weight: 600;
     color: white;
     font-size: 40px;
-    margin: auto;
-    
+    margin: auto;   
+}
+.forms{
+  padding-top: 10px;
+  background-image: url("img/wood.jpg!w700wp");
+  margin: auto;
+  border: 5px solid #ffffff21;
+  border-radius: 12px;
+  height: 65px;
+  width: 1200px;
+  box-sizing: border-box;
+  size: 10%;
+}
+
+.indform{
+  border: 3px solid #ffffff21;
+  color: white;
+  font-family: 'KomikaAxis';
+  width: 370px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: rgb(60, 60, 60);
+}
+.indselect{
+  border: 3px solid #ffffff21;
+  color: white;
+  font-family: 'KomikaAxis';
+  width: 370px;
+  height: 36px;
+  border-radius: 10px;
+  background-color: rgb(60, 60, 60);
 }

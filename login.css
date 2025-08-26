@@ -1,0 +1,37 @@
+@font-face {
+  font-family: 'KomikaAxis';
+  src: url('fonts/KomikaAxis.ttf') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+    background-image: url("img/bookshelf_bl.jpg");
+    background-size: 30%;
+    text-align: center;
+    font-family: 'KomikaAxis';
+    color: white;
+    height: 100%;
+    margin: 0;
+}
+
+
+
+.footer{
+  background-image: url("img/wood.jpg!w700wp");
+  background-size: 1500px;
+  height: 65px;
+  border: 6px solid #ffffff21;;
+  border-radius: 10px;
+}
+.creditbox{
+  display: inline-flex;
+}
+.credits{
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #555555dc;
+  border-radius: 10px;
+}

@@ -14,3 +14,7 @@ function clickbook(){
     document.body.appendChild(span);
 // overlaySpan.remove();
 }
+
+function writeInDB(){
+    
+}

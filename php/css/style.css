@@ -125,13 +125,23 @@ body{
   border-radius: 10px;
 }
 
-@keyframes bookspan{
+@keyframes apear{
   from{opacity: 0;}
   to{opacity: 1;}
 }
+
+@keyframes disapear{
+  from{opacity: 1;}
+  to{opacity: 0;}
+}
+
 @keyframes moveleft{
-  from{width: 0px;}
-  to{width: 700px;}
+  from{width: 0px; opacity: 0;}
+  to{width: 700px; opacity: 1;}
+}
+@keyframes moveright{
+  from{width: 700px; opacity: 1;}
+  to{width: 0px; opacity: 0;}
 }
 
 #bookspan{
@@ -142,7 +152,7 @@ body{
   width: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 100;
-  animation: bookspan 0.5s ease-out forwards;
+  animation: apear 0.3s ease-out forwards;
 }
 
 #bookdiv{

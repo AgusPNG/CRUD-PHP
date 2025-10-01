@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
-    <form class="Logbox" action="../server/high.php" method="POST" enctype="multipart/form-data">
+    
+    <form class="Logbox">
         <p class="indtitle">Registrate</p>
         <input type="text" name="usuario" class="indform" placeholder="Usuario">
-        <input type="text" name="contraseña" class="indform" placeholder="Contraseña">
-        <input type="text" name="r-password" class="indform" placeholder="Repetir contraseña">
-        <button type="submit" class="indbutton">Registrarse</button>
+        <input type="password" name="contraseña" class="indform" placeholder="Contraseña">
+        <input type="password" name="r-contraseña" class="indform" placeholder="Repetir contraseña">
+        <button type="submit" onclick="register()" class="indbutton">Registrarse</button>
     </form>
-    <script src="js/script.js"></script>
+    <script src="../php/js/script.js"></script>
 </body>
 </html>

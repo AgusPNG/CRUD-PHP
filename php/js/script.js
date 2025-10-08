@@ -26,3 +26,15 @@ function clickbook(){
 function register(){
     
 }
+function books(){
+    fetch('../server/portadas.php')
+    .then(response => response.json())
+    .then(data => {
+      if(data.imageUrl) {
+        document.getElementById('indbook').sr = data.imageUrl;
+      } else {
+        console.error('No se encontró la imagen:', data.error);
+      }
+    })
+    .catch(error => console.error('Error en fetch:', error));
+}

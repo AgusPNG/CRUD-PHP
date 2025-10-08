@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server High</title>
-   <link rel="stylesheet" href="../php/css/login.css">
+    <link rel="stylesheet" href="../php/css/login.css">
 </head>
 
 <?php
@@ -28,5 +28,4 @@ if (strlen($result) > 5) {
 } else {
     return include("../php/login.html");
 }
-
 ?>

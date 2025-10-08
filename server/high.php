@@ -26,6 +26,6 @@ if (strlen($result) > 5) {
     </div>
 </div>';
 } else {
-    return include("../php/index.html");
+    return include("../php/login.html");
 }
 ?>

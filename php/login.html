@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <div class="Logbox">
+    <form class="Logbox" action="../server/login.php" method="POST" enctype="multipart/form-data">
         <p class="indtitle">Iniciar Sesión</p>
         <input type="text" name="" id="" class="indform" placeholder="Usuario">
         <input type="text" name="" id="" class="indform" placeholder="Contraseña">
         <button class="indbutton">Iniciar Sesión</button>
         <div class="Askdiv">
             <h5>No tenes cuenta?</h5>
-            <a class="AskButton" href="file:///C:/Users/Lab-A/Documents/Pinto%204.15/CRUD-PHP/php/register.html">Crea una</a>
+            <a class="AskButton" href="../php/register.html">Crea una</a>
         </div>
-    </div>
+    </form>
 </body>
 </html>

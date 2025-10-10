@@ -24,7 +24,22 @@ function clickbook(){
     document.body.appendChild(span);
 }
 function register(){
-    
+    const info = {
+      password: document.getElementById('password').value,
+      user: document.getElementById('user').value
+    }
+    fetch("high.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(info)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Respuesta del PHP:", data);
+  })
+  .catch(error => console.error("Error:", error));
 }
 function books(){
     fetch('../server/portadas.php')

@@ -1,56 +1,71 @@
 <?php
-// Incluimos las funciones de usuario
 include("../model/user.php");
 
-// Inicializamos variable de error
-$error = "";
+$user = $_POST['usuario'] ?? '';
+$password = $_POST['contrasena'] ?? '';
 
-// Revisamos si se envió el formulario
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$result = validateUser($user, $password);
 
-    $user = $_POST['usuario'] ?? '';
-    $password = $_POST['contraseña'] ?? '';
+if ($result === true) {
+    // ✅ Login correcto → redirige al menú
+    header("Location: ../php/menu.html");
+    exit();
+} else {
+    // ❌ Login incorrecto → muestra mensaje con estilo
+    echo '
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .Rbox {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px 40px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            max-width: 400px;
+        }
+        .Rtitulo {
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .Ralerta {
+            background-color: #ffecec;
+            border: 2px solid #ff7b7b;
+            color: #c0392b;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .cerrar {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .cerrar:hover {
+            background-color: #2980b9;
+        }
+    </style>
 
-    // Validamos usuario y contraseña
-    $result = validateUser($user, $password);
-
-    if ($result === true) {
-        // Login correcto → redirige a index.html
-        header("Location: /CRUD-PHP/php/index.html");
-        exit();
-    } else {
-        // Login incorrecto → guardamos mensaje de error
-        $error = "USUARIO O CONTRASEÑA INCORRECTO";
-    }
+    <div class="Rbox">
+        <h2 class="Rtitulo">💬 Respuesta del Servidor</h2>
+        <div class="Ralerta">⚠️ Usuario o contraseña incorrectos</div>
+        <a href="../php/index.html" class="cerrar">Volver</a>
+    </div>
+    ';
+    exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="/CRUD-PHP/php/css/login.css">
-</head>
-<body>
-
-    <?php if (!empty($error)): ?>
-        <div class="Rcontainer">
-            <div class="Rbox">
-                <h2 class="Rtitulo">Error de login</h2>
-                <h3 class="Rcuerpo"><?= $error ?></h3>
-                <a href="#" onclick="this.parentElement.parentElement.style.display='none'" class="cerrar">Cerrar</a>
-            </div>
-        </div>
-    <?php endif; ?>
-
-    <!-- Formulario de login -->
-    <form method="POST" action="">
-        <input type="text" name="usuario" placeholder="Usuario" required><br>
-        <input type="password" name="contraseña" placeholder="Contraseña" required><br>
-        <button type="submit">Ingresar</button>
-    </form>
-
-</body>
-</html>

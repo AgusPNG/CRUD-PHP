@@ -1,8 +1,8 @@
 <?php
 
 header("Content-Type: application/json");
-/*include("../model/user.php");
-/*
+include("../model/user.php");
+
 $user = $_POST['usuario'];
 $password = $_POST['contraseña'];
 
@@ -17,8 +17,7 @@ if (strlen($result) > 5) {
     </div>
 </div>';
 } else {
-    return include("../php/index.html");
+    header("Location: ../php/index.html");
 }
-    */
-echo json_encode("asd");
+    
 ?>

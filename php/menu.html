@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinto Libros - Menú</title>
+    <link rel="stylesheet" href="../php/css/menu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body onload="userconfig()">
+    <div class="user-menu-container">
+        <div class="user-general">
+            <p class="username">Usuario</p>
+            <button class="user-icon-btn" id="userBtn" aria-expanded="false" aria-controls="dropdownMenu">
+            <img src="../php/css/img/user.png" alt="Usuario">
+            </button>
+        </div>
+<ul class="dropdown-menu" id="dropdownMenu" role="menu"> 
+    <li>
+        <a class="dropdown-item" href="../php/modification.html">
+            <i class="fas fa-key"></i> Modificar contraseña
+        </a>
+    </li>
+    <li>
+        <a class="dropdown-item" href="#">
+            <i class="fas fa-trash-alt"></i> Eliminar cuenta
+        </a>
+    </li>
+    <li class="dropdown-divider"></li>
+    <li>
+        <a class="dropdown-item" href="../php/index.html">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </a>
+    </li>
+</ul>    
+    </div>
+
+    <div>
+        <img src="../php/css/img/book.jpg" style="width: 120px; height: 120px;" alt="book" class="start-container"/>
+        <h1 class="start-container">Pinto Libros</h1>
+        <p style="color: rgb(200, 200, 200);">Alquila o compra libros</p>
+    </div>
+    <div class="forms">
+        <input type="text" class="indform" placeholder="Nombre del Libro">
+        <select name="" id="" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
+            <option value="">Todos los Géneros</option>
+            <option value="">Terror</option>
+            <option value="">Humorístico</option>
+            <option value="">Romance</option>
+        </select>
+        <select name="" id="" class="indselect">
+            <option value=""> A - Z</option>
+            <option value=""> Más comprados</option>
+            <option value=""> Más popular</option>
+            <option value=""> Más económicos</option>
+        </select>
+    </div>
+    <div class="bookstorage">
+        <button class="bookcontainer" onclick="clickbook()" data="">
+            <img class="indbook" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoADxMkbl8qh15FHha80LiFcfD9KHialDciA&s" alt="">
+            <p class="indtitle">MINECRAFT</p>
+        </button>
+    </div>
+
+    <footer class="footer">
+        <div class="creditbox">
+            <p class="credits">Interfaz: Pinto</p>
+            <p class="credits">API: Sergio y Mateo</p>
+            <p class="credits">PHP: Mati</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,23 +1,43 @@
 <?php
-
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 include("../model/user.php");
 
-$user = $_POST['usuario'];
-$password = $_POST['contraseña'];
+// Decodificar datos enviados desde fetch()
+$data = json_decode(file_get_contents("php://input"), true);
 
+// Validar existencia de claves
+if (!isset($data["user"]) || !isset($data["password"])) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Faltan datos obligatorios"
+    ]);
+    exit;
+}
+
+$user = $data["user"];
+$password = $data["password"];
+
+// Validar campos vacíos
+if ($user === "" || $password === "") {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Los campos usuario y contraseña no pueden estar vacíos"
+    ]);
+    exit;
+}
+
+// Insertar usuario
 $result = insert($user, $password);
 
-if (strlen($result) > 5) {
-    echo '<div class="Rcontainer">
-    <div class="Rbox">
-        <h2 class="Rtitulo">Esta es una respuesta del servidor</h2>
-        <h3 class="Rcuerpo">' . $result . '</h3>
-        <a href="../php/register.html" class="cerrar">Cerrar</a>
-    </div>
-</div>';
+if ($result) {
+    echo json_encode([
+        "status" => "ok",
+        "message" => "Usuario registrado correctamente"
+    ]);
 } else {
-    header("Location: ../php/index.html");
+    echo json_encode([
+        "status" => "error",
+        "message" => "No se pudo registrar el usuario",
+    ]);
 }
-    
 ?>

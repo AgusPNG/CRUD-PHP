@@ -49,19 +49,5 @@ function validateUser($user, $password)
 ?>
 
 
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
 <?php
 

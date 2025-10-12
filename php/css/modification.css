@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'KomikaAxis';
+    src: url('fonts/KomikaAxis.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+        background-image: url("img/bookshelf_bl.jpg");
+        background-size: 20em;
+        text-align: center;
+        font-family: 'KomikaAxis';
+        color: white;
+}
+
+.indtitle{
+    font-size: 30px;
+    padding: 0em
+}
+
+.mainbox{
+    display: inline-block;
+    background-image: url("img/wood.jpg!w700wp");
+    border-radius: 10px;
+    margin-top: 150px;
+    width: 20em;
+    border: 3px solid white;
+}
+
+.indform:hover{
+    background-color: rgb(80, 80, 80);
+}
+.indform{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-family: 'KomikaAxis';
+    border: 3px solid #ffffff21;
+    color: white;
+    width: 20em;
+    height: 30px;
+    border-radius: 10px;
+    background-color: rgb(60, 60, 60);
+    transition: 0.5s;
+}
+
+.indbutton:hover{
+    color: #d1d1d1;
+    background-color: rgb(60, 60, 60);
+    border: 3px solid white;
+}
+
+.indbutton{
+    font-size: 15px;
+    font-family: 'KomikaAxis';
+    border: 3px solid rgb(60, 60, 60);
+    margin: 20px;
+    width: 200px;
+    height: 50px;
+    color: rgb(60, 60, 60);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.AskButton{
+    display: inline-flex;
+    text-decoration: none;
+    font-size: 15px;
+    color: white;
+    margin-top: 0px;
+    margin-left: 8px;
+    margin-bottom: 20px;
+    height: 25px;
+}
+.AskButton:hover{
+    text-decoration: underline;
+}

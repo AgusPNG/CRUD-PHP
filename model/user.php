@@ -43,7 +43,7 @@ function validateUser($user, $password)
     } else {
         return "USUARIO O CONTRASEÑA INCORRECTO";
     }
-
+ 
     $stmt->close();
 }
 function changePassword($currentPassword, $newPassword)
@@ -91,6 +91,34 @@ function changePassword($currentPassword, $newPassword)
     // Cerramos conexiones
     $stmt->close();
     $update->close();
+}
+
+function deleteAccount()
+{
+    $Conexion = include("conexion.php");
+
+    // Verificar si hay sesión (cookie)
+    if (!isset($_COOKIE['user'])) {
+        return "No hay sesión activa. Inicia sesión primero.";
+    }
+
+    $user = $_COOKIE['user']; // Usuario desde la cookie
+
+    // Preparamos la eliminación segura
+    $stmt = $Conexion->prepare("DELETE FROM usuario WHERE usuario = ?");
+    $stmt->bind_param("s", $user);
+
+    if ($stmt->execute()) {
+        // Eliminamos cookies al borrar cuenta
+        setcookie('user', '', time() - 3600, '/');
+        setcookie('password', '', time() - 3600, '/');
+
+        return "Cuenta eliminada correctamente.";
+    } else {
+        return "Error al eliminar la cuenta.";
+    }
+
+    $stmt->close();
 }
 
 

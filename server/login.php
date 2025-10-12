@@ -12,7 +12,7 @@ if ($result === true) {
     header("Location: ../php/menu.html");
     exit();
 
-
+}
 
  else {
     // ❌ Login incorrecto → muestra mensaje con estilos actualizados

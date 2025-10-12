@@ -7,18 +7,16 @@
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <form class="Logbox" action="../server/login.php" method="POST">
-        <p class="indtitle">Iniciar Sesión</p>
-
-        <input type="text" name="usuario" class="indform" placeholder="Usuario" required>
-        <input type="password" name="contrasena" class="indform" placeholder="Contraseña" required>
-
-        <button class="indbutton" type="submit">Iniciar Sesión</button>
-
+    <form class="Logbox" onsubmit="login(event)" method="POST" enctype="multipart/form-data">
+        <p class="indtitle">Iniciar Sesion</p>
+        <input type="text" name="usuario" id="user" class="indform" placeholder="Usuario">
+        <input type="password" name="contraseña" id="password" class="indform" placeholder="Contraseña">
+        <button type="submit" class="indbutton">Iniciar Sesion</button>
         <div class="Askdiv">
             <h5>¿No tenés cuenta?</h5>
             <a class="AskButton" href="../php/register.html">Crea una</a>
         </div>
     </form>
+    <script src="../php/js/script.js"></script>
 </body>
 </html>

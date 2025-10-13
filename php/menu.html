@@ -53,13 +53,21 @@
         <p style="color: rgb(200, 200, 200);">Alquila o compra libros</p>
     </div>
     <div class="forms">
-        <input type="text" class="indform" placeholder="Nombre del Libro">
-        <select name="" id="" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
-            <option value="">Todos los Géneros</option>
-            <option value="">Terror</option>
-            <option value="">Humorístico</option>
-            <option value="">Romance</option>
-        </select>
+      <input type="text" name="nombre_libro" class="indform" placeholder="Nombre del Libro">
+
+  <select name="genero" id="genero" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
+    <option value="">Todos los Géneros</option>
+    <option value="religion">Religión</option>
+    <option value="infantil">Infantil</option>
+    <option value="biografia">Biografía</option>
+    <option value="fantasia">Fantasía</option>
+    <option value="terror">Terror</option>
+    <option value="medicina">Medicina</option>
+    <option value="novela">Novela</option>
+    <option value="ciencia_ficcion">Ciencia ficción</option>
+    <option value="comedia">Comedia</option>
+    <option value="drama">Drama</option>
+  </select>
         <select name="" id="" class="indselect">
             <option value=""> A - Z</option>
             <option value=""> Más comprados</option>
@@ -67,6 +75,7 @@
             <option value=""> Más económicos</option>
         </select>
     </div>
+    <div id="libros-container"></div>
     <div class="bookstorage">
         <button class="bookcontainer" onclick="clickbook()" data="">
             <img class="indbook" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoADxMkbl8qh15FHha80LiFcfD9KHialDciA&s" alt="">

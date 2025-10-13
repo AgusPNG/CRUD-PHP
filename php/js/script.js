@@ -1,28 +1,72 @@
-function clickbook(){
-    const p = document.createElement('p')
-    p.textContent = 'Librito epico'
-    
-    const div = document.createElement('div')
-    div.id = 'bookdiv'
+function clickbook(nombreLibro, generoLibro, imagenLibro) {
+    const span = document.createElement('span');
+    span.id = 'bookspan';
+    span.addEventListener('click', () => closeBookModal());
 
-    div.addEventListener('click', (e) => e.stopPropagation());
+    const div = document.createElement('div');
+    div.id = 'bookdiv';
+    div.addEventListener('click', e => e.stopPropagation());
 
-    const span = document.createElement('span')
-    span.id = 'bookspan'
-    span.onclick = function closespan(){
-      const div = document.getElementById("bookdiv");
-      div.style.animation = 'moveright 0.3s ease-out forwards';
-      const span = document.getElementById("bookspan")
-      span.style.animation = 'disapear 0.3s ease-out forwards';
-      setTimeout(() => {
-        span.remove();
-      }, 300)
-    }
+    // === BADGE DEL GÉNERO ===
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = generoLibro || 'Sin género';
 
-    div.appendChild(p)
-    span.appendChild(div)
+    // === NOMBRE DEL LIBRO ===
+    const nombre = document.createElement('h2');
+    nombre.textContent = nombreLibro || 'Libro sin nombre';
+
+    // === CONTENIDO (IMAGEN + BOTONES) ===
+    const content = document.createElement('div');
+    content.className = 'book-content';
+
+    const img = document.createElement('img');
+    img.src = imagenLibro || 'https://via.placeholder.com/150';
+    img.alt = nombreLibro;
+
+    // === BOTONES ===
+    const btnContainer = document.createElement('div');
+    btnContainer.className = 'button-container';
+
+    const comprarBtn = document.createElement('button');
+    comprarBtn.className = 'comprar';
+    comprarBtn.textContent = 'Comprar';
+    comprarBtn.onclick = () => alert(`Has comprado ${nombreLibro}!`);
+
+    const alquilarBtn = document.createElement('button');
+    alquilarBtn.className = 'alquilar';
+    alquilarBtn.textContent = 'Alquilar';
+    alquilarBtn.onclick = () => alert(`Has alquilado ${nombreLibro}!`);
+
+    btnContainer.appendChild(comprarBtn);
+    btnContainer.appendChild(alquilarBtn);
+
+    content.appendChild(img);
+    content.appendChild(btnContainer);
+
+    div.appendChild(badge);
+    div.appendChild(nombre);
+    div.appendChild(content);
+
+    span.appendChild(div);
     document.body.appendChild(span);
+
+    // Animación de entrada
+    div.style.animation = 'moveleft 0.5s ease-out forwards';
 }
+
+function closeBookModal() {
+    const div = document.getElementById('bookdiv');
+    if (!div) return;
+    div.style.animation = 'moveright 0.3s ease-out forwards';
+    const span = document.getElementById('bookspan');
+    span.style.animation = 'disapear 0.3s ease-out forwards';
+    setTimeout(() => {
+        if (span) span.remove();
+    }, 300);
+}
+
+
 function register(event){
   event.preventDefault();
   const info = {

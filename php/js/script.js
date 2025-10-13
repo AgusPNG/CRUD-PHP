@@ -186,3 +186,48 @@ function confirmDelete() {
     })
     .catch(err => alert("Error: " + err));
 }
+
+// Función del botón "Ver carrito"
+function verCarrito() {
+    const modal = document.getElementById('carritoModal');
+    const content = modal.querySelector('.carrito-content');
+    content.innerHTML = '';
+
+    // Simulación de libros en carrito (puedes reemplazarlo con fetch de tu DB)
+    const carrito = [
+        {nombre: "Minecraft", estado: "comprado", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoADxMkbl8qh15FHha80LiFcfD9KHialDciA&s"},
+        {nombre: "Harry Potter", estado: "alquilado", imagen: "https://via.placeholder.com/150x200?text=Harry+Potter"}
+    ];
+
+   carrito.forEach(libro => {
+    const card = document.createElement('div');
+    card.classList.add('carrito-card');
+
+    // NOMBRE ARRIBA
+    const title = document.createElement('p');
+    title.innerText = libro.nombre;
+    title.classList.add('carrito-title'); // clase para estilo
+    card.appendChild(title);
+
+    // IMAGEN EN MEDIO
+    const img = document.createElement('img');
+    img.src = libro.imagen;
+    card.appendChild(img);
+
+    // INSIGNIA ABAJO
+    const badge = document.createElement('div');
+    badge.classList.add('badge-status');
+    badge.classList.add(libro.estado === 'comprado' ? 'badge-comprado' : 'badge-alquilado');
+    badge.innerText = libro.estado === 'comprado' ? 'Comprado' : 'Alquilado';
+    badge.classList.add('badge-bottom'); // clase para estilo
+    card.appendChild(badge);
+
+    content.appendChild(card);
+});
+
+    modal.style.display = 'flex';
+}
+
+function cerrarCarrito() {
+    document.getElementById('carritoModal').style.display = 'none';
+}

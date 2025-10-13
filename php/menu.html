@@ -16,6 +16,14 @@
             </button>
         </div>
 <ul class="dropdown-menu" id="dropdownMenu" role="menu"> 
+
+        <li>
+    <a class="dropdown-item" href="#" onclick="verCarrito()">
+        <i class="fas fa-shopping-cart"></i> Ver carrito
+    </a>
+</li>
+    <li class="dropdown-divider"></li>
+
     <li>
         <a class="dropdown-item" href="../php/modification.html">
             <i class="fas fa-key"></i> Modificar contraseña
@@ -35,6 +43,19 @@
     </li>
 </ul>    
     </div>
+
+
+    <div id="carritoModal" class="confirm-overlay" style="display: none;">
+    <div id="carritoDiv">
+        <h2>Mis Productos</h2>
+        <div class="carrito-content">
+            <!-- Aquí se agregarán los libros dinámicamente -->
+        </div>
+        <div class="button-container">
+            <button onclick="cerrarCarrito()">Cerrar</button>
+        </div>
+    </div>
+</div>
 
 <div id="deleteConfirm" class="confirm-overlay" style="display: none;">
         <div class="confirm-box">
@@ -91,6 +112,6 @@
         </div>
     </footer>
 
-    <script src="js/menu.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

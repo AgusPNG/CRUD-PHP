@@ -26,7 +26,17 @@ if ($user === "" || $password === "") {
     exit;
 }
 
-// Insertar usuario
+// Verificar si ya existe antes de insertar
+$exist = verifyUser($user);
+if ($exist) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Ya existe este usuario"
+    ]);
+    exit;
+}
+
+// Insertar usuario si no existe
 $result = insert($user, $password);
 
 if ($result) {
@@ -37,7 +47,7 @@ if ($result) {
 } else {
     echo json_encode([
         "status" => "error",
-        "message" => "No se pudo registrar el usuario",
+        "message" => "No se pudo registrar el usuario"
     ]);
 }
 ?>

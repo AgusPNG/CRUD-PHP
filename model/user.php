@@ -16,9 +16,24 @@ function insert($user, $password)
             return substr($e, 22, 41);
         }
 }
+function verifyUser($user) {
+    $Conexion = include("conexion.php");
+
+    $stmt = $Conexion->prepare("SELECT usuario FROM usuario WHERE usuario = ?");
+    $stmt->bind_param("s", $user);
+    $stmt->execute();
+    $stmt->store_result();
+
+    // Comprobamos si hay resultados
+    if ($stmt->num_rows > 0){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Función para validar usuario y contraseña
-function validateUser($user, $password)
-{
+function validateUser($user, $password){
     $Conexion = include("conexion.php");
 
     // Consulta segura usando prepare
@@ -124,4 +139,3 @@ function deleteAccount()
 
 ?>
 <?php
-

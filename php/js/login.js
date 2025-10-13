@@ -18,6 +18,9 @@ function login(event){
       alert("Iniciaste sesion correctamente");
     } else {
       alert("Error: " + data.message);
+      //const span = document.createElement("span")
+      //span.textContent = data.message;
+      //document.body.appendChild(span);
     }
   })
   .catch(err => console.error("Error en fetch:", err));

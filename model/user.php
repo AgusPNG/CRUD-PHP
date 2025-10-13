@@ -108,8 +108,7 @@ function changePassword($currentPassword, $newPassword)
     $update->close();
 }
 
-function deleteAccount()
-{
+function deleteAccount(){
     $Conexion = include("conexion.php");
 
     // Verificar si hay sesión (cookie)
@@ -135,7 +134,5 @@ function deleteAccount()
 
     $stmt->close();
 }
-
-
 ?>
 <?php

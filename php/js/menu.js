@@ -5,8 +5,16 @@ function getCookie(name) {
 }
 
 window.onpageshow = function(e) {
-  if (e.persisted) window.location.reload();
+  if (e.persisted) {
+    window.location.reload()
+  };
 };
+
+function init(){
+  redirect()
+  userconfig()
+  loadBooks()
+}
 
 function clickbook(nombreLibro, generoLibro, imagenLibro) {
     const span = document.createElement('span');
@@ -94,8 +102,6 @@ function redirect(){
 }
 
 function userconfig(){
-  redirect()
-  
   const user = getCookie("user");
   document.querySelector(".username").textContent = `${user}`;
 
@@ -184,4 +190,57 @@ function verCarrito() {
 
 function cerrarCarrito() {
     document.getElementById('carritoModal').style.display = 'none';
+}
+// ==================================================================
+// ================== Portadas de los libros ========================
+// ==================================================================
+
+function loadBooks() {
+  fetch('../server/fronts.php')
+  .then(response => response.json())
+  .then(data => {
+    
+    for (let i = 1; i <= data.message; i++){
+      console.log(i);
+
+      fetch("../server/fronts.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(i)
+      })
+      .then(res => res.json())
+      .then(data => {
+      console.log(data);
+      if(data.status === "ok") {
+        window.location.href = "../php/menu.html";
+        document.cookie = `user=${info.user}; password=${info.password}; path=/; max-age=3600`; // 1 hora
+        alert("Iniciaste sesion correctamente");
+      } else {
+        alert("Error: " + data.message);
+        //const span = document.createElement("span")
+        //span.textContent = data.message;
+        //document.body.appendChild(span);
+      }
+
+  })
+  .catch(err => console.error("Error en fetch:", err));
+    }
+
+
+  })
+  .catch(error => {
+    console.error('Error al hacer fetch:', error);
+  });
+  //for (let i = 1; i <= count; i++){
+
+  //}
+  /*const html = `
+    <button class="bookcontainer" onclick="clickbook()" data="">
+      <img class="indbook" src="${url}" alt="">
+      <p class="indtitle">${img}</p>
+    </button>
+  `;
+
+  const storage = document.querySelector(".bookstorage");
+  storage.innerHTML += html;*/
 }

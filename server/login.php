@@ -17,19 +17,18 @@ $password = $data["password"];
 
 $result = validateUser($user, $password);
 
-
 if ($result === true) {
     // ✅ Login correcto → redirige al menú
     echo json_encode([
         "status" => "ok",
-        "message" => "Usuario registrado correctamente"
+        "message" => "Usuario logeado correctamente"
     ]);
     exit();
 }
  else {
     echo json_encode([
         "status" => "error",
-        "message" => "No se pudo registrar el usuario",
+        "message" => "No se pudo logear el usuario",
     ]);
     // ❌ Login incorrecto → muestra mensaje con estilos actualizados
     exit();

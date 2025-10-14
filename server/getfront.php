@@ -8,10 +8,12 @@ $id = json_decode(file_get_contents("php://input"), true);
 
 $img = bookurls($id);
 $name = booknames($id);
+$gender = bookgenders($id);
 
 echo json_encode([
     "status" => "ok",
     "url" => $img,
+    "gender" => $gender,
     "name" => $name
 ]);
 ?>

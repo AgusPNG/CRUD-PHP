@@ -31,6 +31,23 @@ function bookurls($id) {
 
     return $img; // devuelve el valor real, no null
 }
+function bookgenders($id) {
+    include("conexion.php");
+
+    $stmt = $Conexion->prepare("SELECT genero FROM libros WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    // Vinculamos el resultado
+    $stmt->bind_result($gender);
+    $stmt->fetch();
+
+    // Cerramos recursos
+    $stmt->close();
+    $Conexion->close();
+
+    return $gender; // devuelve el valor real, no null
+}
 function booknames($id) {
     include("conexion.php");
 

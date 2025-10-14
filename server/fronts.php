@@ -6,10 +6,12 @@ $count = bookcount();
 $imgs = [];
 $names = [];
 $id = [];
+$genders = [];
 
 for ($i = 1; $i <= $count; $i++) {
     $imgs[] = bookurls($i);
     $names[] = booknames($i);
+    $genders[] = bookgenders($i);
     $id[] = $i;
 }
 
@@ -18,6 +20,7 @@ echo json_encode([
     "url" => $imgs,
     "name" => $names,
     "count" => $count,
+    "gender" => $genders,
     "id" => $id
 ]);
 ?>

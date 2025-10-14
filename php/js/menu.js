@@ -17,9 +17,6 @@ function init(){
 }
 
 function clickbook(id) {
-  let url;
-  let name;
-
   fetch("../server/getfront.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -40,7 +37,7 @@ function clickbook(id) {
     // === BADGE DEL GÉNERO ===
     const badge = document.createElement('span');
     badge.className = 'badge';
-    badge.textContent = 'Sin género';
+    badge.textContent = data.gender;
 
     // === NOMBRE DEL LIBRO ===
     const nombre = document.createElement('h2');
@@ -91,7 +88,27 @@ function clickbook(id) {
     }
   })
   .catch(err => console.error("Error en fetch:", err));
+}
+function selectfilter(){
+  let count
+  fetch('../server/delete.php')
+  .then(response => response.json())
+  .then(data => {
+      count = data.count
+  })
+  .catch(err => alert("Error: " + err));
 
+  let libros
+  const select = document.getElementById("genero")
+  if(select.value = "Todos los generos")
+    libros = document.querySelector(".bookstorage")
+  /*else
+    for(i=0; i<count; i++){
+      libros.
+      if(button.data != select.value){
+        button
+      }
+    }*/
 }
 
 function closeBookModal() {
@@ -225,6 +242,7 @@ function loadBooks() {
       const button = document.createElement("button")
       button.setAttribute("onclick", `clickbook(${data.id[i]})`);
       button.className = "bookcontainer"
+      button.dataset = data.gender[i]
 
       const img = document.createElement("img")
       img.className = "indbook"

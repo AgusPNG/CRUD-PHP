@@ -16,7 +16,19 @@ function init(){
   loadBooks()
 }
 
-function clickbook(nombreLibro, generoLibro, imagenLibro) {
+function clickbook(id) {
+  let url;
+  let name;
+
+  fetch("../server/getfront.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(id)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.status === "ok") {
+
     const span = document.createElement('span');
     span.id = 'bookspan';
     span.addEventListener('click', () => closeBookModal());
@@ -28,19 +40,18 @@ function clickbook(nombreLibro, generoLibro, imagenLibro) {
     // === BADGE DEL GÉNERO ===
     const badge = document.createElement('span');
     badge.className = 'badge';
-    badge.textContent = generoLibro || 'Sin género';
+    badge.textContent = 'Sin género';
 
     // === NOMBRE DEL LIBRO ===
     const nombre = document.createElement('h2');
-    nombre.textContent = nombreLibro || 'Libro sin nombre';
+    nombre.textContent = data.name;
 
     // === CONTENIDO (IMAGEN + BOTONES) ===
     const content = document.createElement('div');
     content.className = 'book-content';
 
     const img = document.createElement('img');
-    img.src = imagenLibro || 'https://via.placeholder.com/150';
-    img.alt = nombreLibro;
+    img.src = data.url;
 
     // === BOTONES ===
     const btnContainer = document.createElement('div');
@@ -71,6 +82,16 @@ function clickbook(nombreLibro, generoLibro, imagenLibro) {
 
     // Animación de entrada
     div.style.animation = 'moveleft 0.5s ease-out forwards';
+
+    } else {
+      alert("Error: " + data.message);
+      //const span = document.createElement("span")
+      //span.textContent = data.message;
+      //document.body.appendChild(span);
+    }
+  })
+  .catch(err => console.error("Error en fetch:", err));
+
 }
 
 function closeBookModal() {
@@ -199,11 +220,12 @@ function loadBooks() {
   fetch('../server/fronts.php')
   .then(response => response.json())
   .then(data => {
-    for(i=1; i<data.count; i++){
+    for(i=0; i<data.count; i++){
 
       const button = document.createElement("button")
+      button.setAttribute("onclick", `clickbook(${data.id[i]})`);
       button.className = "bookcontainer"
-      button.onclick = clickbook
+      button.dataset.id = data.id[i]
 
       const img = document.createElement("img")
       img.className = "indbook"

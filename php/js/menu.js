@@ -225,7 +225,6 @@ function loadBooks() {
       const button = document.createElement("button")
       button.setAttribute("onclick", `clickbook(${data.id[i]})`);
       button.className = "bookcontainer"
-      button.dataset.id = data.id[i]
 
       const img = document.createElement("img")
       img.className = "indbook"
@@ -260,4 +259,5 @@ function loadBooks() {
   .catch(error => {
     console.error('Error al hacer fetch:', error);
   });
+
 }

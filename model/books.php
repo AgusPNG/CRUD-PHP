@@ -1,6 +1,6 @@
 <?php
 function bookcount() {
-    $Conexion = include("conexion.php");
+    include("conexion.php");
 
     // Preparamos la consulta sin parámetros
     $stmt = $Conexion->prepare("SELECT img FROM libros;");
@@ -14,12 +14,39 @@ function bookcount() {
 
     return $count;
 }
-function bookdates($id){
-    $Conexion = include("conexion.php");
+function bookurls($id) {
+    include("conexion.php");
 
-    $stmt = $Conexion->prepare("SELECT img FROM libros WHERE id = ?;");
+    $stmt = $Conexion->prepare("SELECT img FROM libros WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $stmt->store_result();
+
+    // Vinculamos el resultado
+    $stmt->bind_result($img);
+    $stmt->fetch();
+
+    // Cerramos recursos
+    $stmt->close();
+    $Conexion->close();
+
+    return $img; // devuelve el valor real, no null
 }
+function booknames($id) {
+    include("conexion.php");
+
+    $stmt = $Conexion->prepare("SELECT nombre FROM libros WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    // Vinculamos el resultado
+    $stmt->bind_result($name);
+    $stmt->fetch();
+
+    // Cerramos recursos
+    $stmt->close();
+    $Conexion->close();
+
+    return $name; // devuelve el valor real, no null
+}
+
 ?>

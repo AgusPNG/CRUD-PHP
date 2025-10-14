@@ -199,48 +199,43 @@ function loadBooks() {
   fetch('../server/fronts.php')
   .then(response => response.json())
   .then(data => {
-    
-    for (let i = 1; i <= data.message; i++){
-      console.log(i);
+    for(i=1; i<data.count; i++){
 
-      fetch("../server/fronts.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(i)
-      })
-      .then(res => res.json())
-      .then(data => {
-      console.log(data);
-      if(data.status === "ok") {
-        window.location.href = "../php/menu.html";
-        document.cookie = `user=${info.user}; password=${info.password}; path=/; max-age=3600`; // 1 hora
-        alert("Iniciaste sesion correctamente");
-      } else {
-        alert("Error: " + data.message);
-        //const span = document.createElement("span")
-        //span.textContent = data.message;
-        //document.body.appendChild(span);
-      }
+      const button = document.createElement("button")
+      button.className = "bookcontainer"
+      button.onclick = clickbook
 
-  })
-  .catch(err => console.error("Error en fetch:", err));
+      const img = document.createElement("img")
+      img.className = "indbook"
+      img.src = data.url[i]
+
+      const p = document.createElement("p")
+      p.className = "indtitle"
+      p.textContent = `${data.name[i]}`
+
+      const title = data.name[i];
+      const words = title.split(" ");
+      let longestWord = 0;
+
+      for (const word of words)
+        if (word.length > longestWord) longestWord = word.length;
+
+      if (title.length <= 10 && longestWord <= 6)
+        p.style.fontSize = "40px";
+      else if (title.length <= 20 && longestWord <= 10)
+        p.style.fontSize = "28px";
+      else if (title.length <= 30 || longestWord > 10) 
+        p.style.fontSize = "34px";
+      else 
+        p.style.fontSize = "27px";
+
+      const container = document.querySelector(".bookstorage")
+      button.appendChild(img)
+      button.appendChild(p)
+      container.appendChild(button)
     }
-
-
   })
   .catch(error => {
     console.error('Error al hacer fetch:', error);
   });
-  //for (let i = 1; i <= count; i++){
-
-  //}
-  /*const html = `
-    <button class="bookcontainer" onclick="clickbook()" data="">
-      <img class="indbook" src="${url}" alt="">
-      <p class="indtitle">${img}</p>
-    </button>
-  `;
-
-  const storage = document.querySelector(".bookstorage");
-  storage.innerHTML += html;*/
 }

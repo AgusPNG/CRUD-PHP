@@ -85,7 +85,10 @@ INSERT INTO `inventario` (`ID_ESTADO`, `ID_LIBRO`, `STOCK`) VALUES
 (22, 22, 50),
 (23, 23, 50),
 (24, 24, 50),
-(25, 25, 50);
+(25, 25, 50),
+(26, 26, 50),
+(27, 27, 50),
+(28, 28, 50);
 
 -- --------------------------------------------------------
 
@@ -130,7 +133,10 @@ INSERT INTO `libros` (`NOMBRE`, `ID`, `GENERO`, `IMG`, `STOCK`) VALUES
 ('LA VIDA DE PI', 22, 'NOVELA', 'https://images.cdn3.buscalibre.com/fit-in/360x360/cc/ad/ccad09a771a20a1f40154f43eb769ec3.jpg', 50),
 ('¡ES UN ZORRO!', 23, 'INFANTIL', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbqqtj86KjcYlbzg9pIOmNbLhBovV8S4uWXQ&s', 50),
 ('WAITING', 24, 'DRAMA', 'https://images.cdn2.buscalibre.com/fit-in/360x360/dc/31/7d07c62196ac51d510260905bd1ea26e.jpg', 50),
-('MINECRAFT: LA GUÍA DEFINITIVA', 25, 'INFANTIL', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoADxMkbl8qh15FHha80LiFcfD9KHialDciA&s', 50);
+('MINECRAFT: LA GUÍA DEFINITIVA', 25, 'INFANTIL', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoADxMkbl8qh15FHha80LiFcfD9KHialDciA&s', 50),
+('LO MEJOR Y LO PEOR DE INTERNET', 26, 'BIOGRAFÍA', 'https://www.penguinlibros.com/ar/2974159/lo-mejor-y-lo-peor-de-internet.jpg', 50),
+('CHUPA EL PERRO', 27, 'COMEDIA', 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1460135744i/29857789.jpg', 50),
+('FIVE NIGHTS AT FREDDYS', 28, 'TERROR', 'https://www.penguinlibros.com/ar/3455975/five-nights-at-freddy-s-escalofrios-de-fazbear-1-el-parque-de-bolas.jpg', 50);
 
 -- --------------------------------------------------------
 

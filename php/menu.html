@@ -15,33 +15,31 @@
             <img src="../php/css/img/user.png" alt="Usuario">
             </button>
         </div>
-<ul class="dropdown-menu" id="dropdownMenu" role="menu"> 
+        <ul class="dropdown-menu" id="dropdownMenu" role="menu"> 
 
         <li>
-    <a class="dropdown-item" href="#" onclick="verCarrito()">
-        <i class="fas fa-shopping-cart"></i> Ver carrito
-    </a>
-</li>
-    <li class="dropdown-divider"></li>
-
-    <li>
-        <a class="dropdown-item" href="../php/modification.html">
-            <i class="fas fa-key"></i> Modificar contraseña
-        </a>
-    </li>
-    <li>
-        <a class="dropdown-item" href="#" onclick="showDeleteConfirm()">
-    <i class="fas fa-trash-alt"></i> Eliminar cuenta
-</a>
-
-    </li>
-    <li class="dropdown-divider"></li>
-    <li>
-        <a class="dropdown-item" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </a>
-    </li>
-</ul>    
+            <a class="dropdown-item" href="#" onclick="verCarrito()">
+                <i class="fas fa-shopping-cart"></i> Ver carrito
+            </a>
+        </li>
+        <li class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" href="../php/modification.html">
+                <i class="fas fa-key"></i> Modificar contraseña
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" onclick="showDeleteConfirm()">
+                <i class="fas fa-trash-alt"></i> Eliminar cuenta
+            </a>
+        </li>
+        <li class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </a>
+        </li>
+        </ul>    
     </div>
 
 
@@ -77,17 +75,17 @@
       <input type="text" name="nombre_libro" class="indform" placeholder="Nombre del Libro">
 
   <select onchange="selectfilter()" name="genero" id="genero" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
-    <option value="">Todos los Géneros</option>
-    <option value="religion">Religión</option>
-    <option value="infantil">Infantil</option>
-    <option value="biografia">Biografía</option>
-    <option value="fantasia">Fantasía</option>
-    <option value="terror">Terror</option>
-    <option value="medicina">Medicina</option>
-    <option value="novela">Novela</option>
-    <option value="ciencia_ficcion">Ciencia ficción</option>
-    <option value="comedia">Comedia</option>
-    <option value="drama">Drama</option>
+    <option value="todos_los_generos">Todos los Géneros</option>
+    <option value="RELIGIÓN">Religión</option>
+    <option value="INFANTIL">Infantil</option>
+    <option value="BIOGRAFÍA">Biografía</option>
+    <option value="FANTASÍA">Fantasía</option>
+    <option value="TERROR">Terror</option>
+    <option value="MEDICINA">Medicina</option>
+    <option value="NOVELA">Novela</option>
+    <option value="CIENCIA FICCIÓN">Ciencia ficción</option>
+    <option value="COMEDIA">Comedia</option>
+    <option value="DRAMA">Drama</option>
   </select>
         <select name="" id="" class="indselect">
             <option value=""> A - Z</option>

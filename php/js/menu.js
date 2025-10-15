@@ -63,7 +63,6 @@ function clickbook(id) {
   .then(res => res.json())
   .then(data => {
     if(data.status === "ok") {
-
     const bookId = id; // Guardamos el ID del libro
     
     const span = document.createElement('span');
@@ -129,25 +128,20 @@ function clickbook(id) {
   .catch(err => console.error("Error en fetch:", err));
 }
 function selectfilter(){
-  let count
-  fetch('../server/delete.php')
-  .then(response => response.json())
-  .then(data => {
-      count = data.count
-  })
-  .catch(err => alert("Error: " + err));
+  const select = document.getElementById("genero");
 
-  let libros
-  const select = document.getElementById("genero")
-  if(select.value = "Todos los generos")
-    libros = document.querySelector(".bookstorage")
-  /*else
-    for(i=0; i<count; i++){
-      libros.
-      if(button.data != select.value){
-        button
+  fetch('../server/fronts.php')
+    .then(response => response.json())
+    .then(data => {
+      for (let i = 1; i <= data.count; i++) {
+        const book = document.querySelector(`[data-id="${i}"]`);
+        if (book.dataset.gender == select.value || select.value == "todos_los_generos")
+          book.style.display = "inline-block"
+        else
+          book.style.display = "none"
       }
-    }*/
+    })
+    .catch(err => alert("Error: " + err));
 }
 
 function closeBookModal() {
@@ -276,36 +270,44 @@ function loadBooks() {
   fetch('../server/fronts.php')
   .then(response => response.json())
   .then(data => {
+    let book = []
+    for(i=0; i<data.count; i++){
+      book.push({
+        id: data.id[i],
+        name: data.name[i],
+        url: data.url[i],
+        gender: data.gender[i]
+      })
+    }
+    book.sort((a, b) => a.name.localeCompare(b.name));
+
     for(i=0; i<data.count; i++){
 
       const button = document.createElement("button")
-      button.setAttribute("onclick", `clickbook(${data.id[i]})`);
+      button.setAttribute("onclick", `clickbook(${book[i].id})`);
       button.className = "bookcontainer"
-      button.dataset = data.gender[i]
+      button.dataset.gender = book[i].gender
+      button.dataset.id = book[i].id
 
       const img = document.createElement("img")
       img.className = "indbook"
-      img.src = data.url[i]
+      img.src = book[i].url
 
       const p = document.createElement("p")
       p.className = "indtitle"
-      p.textContent = `${data.name[i]}`
+      p.textContent = `${book[i].name}`
 
-      const title = data.name[i];
+      const title = book[i].name;
       const words = title.split(" ");
       let longestWord = 0;
 
       for (const word of words)
         if (word.length > longestWord) longestWord = word.length;
 
-      if (title.length <= 10 && longestWord <= 6)
-        p.style.fontSize = "40px";
-      else if (title.length <= 20 && longestWord <= 10)
-        p.style.fontSize = "28px";
-      else if (title.length <= 30 || longestWord > 10) 
+      if (title.length <= 20 && longestWord <= 10)
         p.style.fontSize = "34px";
       else 
-        p.style.fontSize = "27px";
+        p.style.fontSize = "28px";
 
       const container = document.querySelector(".bookstorage")
       button.appendChild(img)
@@ -316,5 +318,4 @@ function loadBooks() {
   .catch(error => {
     console.error('Error al hacer fetch:', error);
   });
-
 }

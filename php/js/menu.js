@@ -16,16 +16,56 @@ function init(){
   loadBooks()
 }
 
+// 💡 NUEVA FUNCIÓN PARA MANEJAR COMPRA/ALQUILER
+function handleTransaction(bookId, type) {
+    const username = getCookie("user"); // Obtiene el nombre de usuario de la cookie
+    
+    if (!username) {
+        alert("Error: No se encontró la sesión del usuario. Por favor, inicie sesión de nuevo.");
+        return;
+    }
+
+    const transactionData = {
+        book_id: bookId,
+        username: username, // Enviamos el username para que PHP pueda buscar el ID
+        type: type // 'COMPRA' o 'ALQUILER'
+    };
+
+    // 💡 CAMBIAMOS LA RUTA A server/menu.php
+    fetch("../server/menu.php", { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(transactionData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "ok") {
+            // Mostrar mensaje de éxito y cerrar modal
+            alert(`¡Transacción exitosa! ${type === 'COMPRA' ? 'Has comprado' : 'Has alquilado'} ${data.book_name}.`);
+            closeBookModal();
+        } else {
+            // Mostrar mensaje de error (ej: falta de stock, error DB, etc.)
+            alert("Error al realizar la transacción: " + data.message);
+        }
+    })
+    .catch(err => {
+        console.error("Error en fetch de transacción:", err);
+        alert("Ocurrió un error de conexión al procesar la transacción.");
+    });
+}
+
 function clickbook(id) {
   fetch("../server/getfront.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(id)
+    body: JSON.stringify({ id: id }) // CORREGIDO: Enviar el ID como objeto
   })
   .then(res => res.json())
   .then(data => {
     if(data.status === "ok") {
 
+    const bookId = id; // Guardamos el ID del libro
+    
     const span = document.createElement('span');
     span.id = 'bookspan';
     span.addEventListener('click', () => closeBookModal());
@@ -57,12 +97,14 @@ function clickbook(id) {
     const comprarBtn = document.createElement('button');
     comprarBtn.className = 'comprar';
     comprarBtn.textContent = 'Comprar';
-    comprarBtn.onclick = () => alert(`Has comprado ${nombreLibro}!`);
+    // 💡 CAMBIO: Llamar a la nueva función con el ID y el tipo
+    comprarBtn.onclick = () => handleTransaction(bookId, 'COMPRA');
 
     const alquilarBtn = document.createElement('button');
     alquilarBtn.className = 'alquilar';
     alquilarBtn.textContent = 'Alquilar';
-    alquilarBtn.onclick = () => alert(`Has alquilado ${nombreLibro}!`);
+    // 💡 CAMBIO: Llamar a la nueva función con el ID y el tipo
+    alquilarBtn.onclick = () => handleTransaction(bookId, 'ALQUILER');
 
     btnContainer.appendChild(comprarBtn);
     btnContainer.appendChild(alquilarBtn);
@@ -82,9 +124,6 @@ function clickbook(id) {
 
     } else {
       alert("Error: " + data.message);
-      //const span = document.createElement("span")
-      //span.textContent = data.message;
-      //document.body.appendChild(span);
     }
   })
   .catch(err => console.error("Error en fetch:", err));

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 14, 2025 at 08:58 PM
+-- Generation Time: Oct 15, 2025 at 02:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,31 +33,15 @@ CREATE TABLE `historial` (
   `ID_LIBRO` int(11) NOT NULL,
   `TIPO` enum('COMPRA','ALQUILER') NOT NULL,
   `FECHA_DEOPERACION` datetime DEFAULT current_timestamp(),
-  `FECHA_DEVOLUCION` date DEFAULT NULL
+  `FECHA_DEVOLUCION` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Triggers `historial`
+-- Dumping data for table `historial`
 --
-DELIMITER $$
-CREATE TRIGGER `actualizar_stock_historial` AFTER INSERT ON `historial` FOR EACH ROW BEGIN
-    -- Restar 1 al stock
-    UPDATE estado_libro
-    SET STOCK = STOCK - 1
-    WHERE ID_LIBRO = NEW.ID_LIBRO;
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `devolver_libro_historial` AFTER UPDATE ON `historial` FOR EACH ROW BEGIN
-    IF OLD.FECHA_DEVOLUCION IS NULL AND NEW.FECHA_DEVOLUCION IS NOT NULL AND NEW.TIPO = 'ALQUILER' THEN
-        UPDATE estado_libro
-        SET STOCK = STOCK + 1
-        WHERE ID_LIBRO = NEW.ID_LIBRO;
-    END IF;
-END
-$$
-DELIMITER ;
+
+INSERT INTO `historial` (`ID_HISTORIAL`, `ID_USUARIO`, `ID_LIBRO`, `TIPO`, `FECHA_DEOPERACION`, `FECHA_DEVOLUCION`) VALUES
+(27, 18, 2, 'ALQUILER', '2025-10-14 21:43:39', '2025-10-14 21:44:39');
 
 -- --------------------------------------------------------
 
@@ -68,9 +52,40 @@ DELIMITER ;
 CREATE TABLE `inventario` (
   `ID_ESTADO` int(11) NOT NULL,
   `ID_LIBRO` int(11) NOT NULL,
-  `STOCK` int(11) NOT NULL DEFAULT 0,
+  `STOCK` int(11) NOT NULL DEFAULT 50,
   `DISPONIBILIDAD` enum('DISPONIBLE','NO DISPONIBLE') GENERATED ALWAYS AS (case when `STOCK` > 0 then 'DISPONIBLE' else 'NO DISPONIBLE' end) STORED
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `inventario`
+--
+
+INSERT INTO `inventario` (`ID_ESTADO`, `ID_LIBRO`, `STOCK`) VALUES
+(1, 1, 39),
+(2, 2, 49),
+(3, 3, 50),
+(4, 4, 50),
+(5, 5, 50),
+(6, 6, 50),
+(7, 7, 50),
+(8, 8, 50),
+(9, 9, 50),
+(10, 10, 50),
+(11, 11, 50),
+(12, 12, 50),
+(13, 13, 50),
+(14, 14, 50),
+(15, 15, 50),
+(16, 16, 50),
+(17, 17, 50),
+(18, 18, 50),
+(19, 19, 50),
+(20, 20, 50),
+(21, 21, 50),
+(22, 22, 50),
+(23, 23, 50),
+(24, 24, 50),
+(25, 25, 50);
 
 -- --------------------------------------------------------
 
@@ -166,6 +181,32 @@ ALTER TABLE `inventario`
 --
 ALTER TABLE `libros`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `historial`
+--
+ALTER TABLE `historial`
+  MODIFY `ID_HISTORIAL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `inventario`
+--
+ALTER TABLE `inventario`
+  MODIFY `ID_ESTADO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `inventario`
+--
+ALTER TABLE `inventario`
+  ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`ID_LIBRO`) REFERENCES `libros` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

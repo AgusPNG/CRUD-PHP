@@ -14,6 +14,22 @@ function init(){
   redirect()
   userconfig()
   loadBooks()
+  const input = document.getElementById("searchname")
+    input.addEventListener('input', () => {searchname(input)})
+}
+function searchname(input){
+  fetch('../server/fronts.php')
+    .then(response => response.json())
+    .then(data => {
+      for (let i = 1; i <= data.count; i++) {
+        const book = document.querySelector(`[data-id="${i}"]`);
+        if (book.textContent.includes(input.value.toUpperCase()))
+          book.style.display = "inline-block"
+        else
+          book.style.display = "none"
+      }
+    })
+    .catch(err => alert("Error: " + err));
 }
 
 // 💡 NUEVA FUNCIÓN PARA MANEJAR COMPRA/ALQUILER
@@ -127,7 +143,7 @@ function clickbook(id) {
   })
   .catch(err => console.error("Error en fetch:", err));
 }
-function selectfilter(){
+function selectgender(){
   const select = document.getElementById("genero");
 
   fetch('../server/fronts.php')
@@ -142,6 +158,13 @@ function selectfilter(){
       }
     })
     .catch(err => alert("Error: " + err));
+}
+function selectorder(){
+  const select = document.getElementById("orden")
+  const buttons = document.querySelectorAll('.bookcontainer')
+  buttons.forEach(button => button.remove())
+
+  loadBooks()
 }
 
 function closeBookModal() {
@@ -279,7 +302,11 @@ function loadBooks() {
         gender: data.gender[i]
       })
     }
-    book.sort((a, b) => a.name.localeCompare(b.name));
+    const select = document.getElementById("orden")
+    if(select.value == "a-z")
+      book.sort((a, b) => a.name.localeCompare(b.name))
+    else if(select.value == "z-a")
+      book.sort((b, a) => a.name.localeCompare(b.name))
 
     for(i=0; i<data.count; i++){
 

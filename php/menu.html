@@ -72,27 +72,28 @@
         <p style="color: rgb(200, 200, 200);">Alquila o compra libros</p>
     </div>
     <div class="forms">
-      <input type="text" name="nombre_libro" class="indform" placeholder="Nombre del Libro">
+      <input type="text" name="nombre_libro" id="searchname" class="indform" placeholder="Nombre del Libro">
 
-  <select onchange="selectfilter()" name="genero" id="genero" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
-    <option value="todos_los_generos">Todos los Géneros</option>
-    <option value="RELIGIÓN">Religión</option>
-    <option value="INFANTIL">Infantil</option>
-    <option value="BIOGRAFÍA">Biografía</option>
-    <option value="FANTASÍA">Fantasía</option>
-    <option value="TERROR">Terror</option>
-    <option value="MEDICINA">Medicina</option>
-    <option value="NOVELA">Novela</option>
-    <option value="CIENCIA FICCIÓN">Ciencia ficción</option>
-    <option value="COMEDIA">Comedia</option>
-    <option value="DRAMA">Drama</option>
-  </select>
-        <select name="" id="" class="indselect">
-            <option value=""> A - Z</option>
-            <option value=""> Más comprados</option>
-            <option value=""> Más popular</option>
-            <option value=""> Más económicos</option>
-        </select>
+    <select onchange="selectgender()" name="genero" id="genero" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
+        <option value="todos_los_generos">Todos los Géneros</option>
+        <option value="RELIGIÓN">Religión</option>
+        <option value="INFANTIL">Infantil</option>
+        <option value="BIOGRAFÍA">Biografía</option>
+        <option value="FANTASÍA">Fantasía</option>
+        <option value="TERROR">Terror</option>
+        <option value="MEDICINA">Medicina</option>
+        <option value="NOVELA">Novela</option>
+        <option value="CIENCIA FICCIÓN">Ciencia ficción</option>
+        <option value="COMEDIA">Comedia</option>
+        <option value="DRAMA">Drama</option>
+    </select>
+
+    <select onchange="selectorder()" name="orden" id="orden" class="indselect">
+            <option value="a-z"> A - Z</option>
+            <option value="z-a"> Z - A</option>
+            <option value="stock"> Más stock</option>
+            <option value="stock"> Menos stock</option>
+    </select>
     </div>
     <div id="libros-container"></div>
     <div class="bookstorage">

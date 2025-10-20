@@ -17,6 +17,7 @@ function init(){
   const input = document.getElementById("searchname")
     input.addEventListener('input', () => {searchname(input)})
 }
+
 function searchname(input){
   fetch('../server/fronts.php')
     .then(response => response.json())
@@ -32,9 +33,8 @@ function searchname(input){
     .catch(err => alert("Error: " + err));
 }
 
-// 💡 NUEVA FUNCIÓN PARA MANEJAR COMPRA/ALQUILER
 function handleTransaction(bookId, type) {
-    const username = getCookie("user"); // Obtiene el nombre de usuario de la cookie
+    const username = getCookie("user");
     
     if (!username) {
         alert("Error: No se encontró la sesión del usuario. Por favor, inicie sesión de nuevo.");
@@ -43,11 +43,10 @@ function handleTransaction(bookId, type) {
 
     const transactionData = {
         book_id: bookId,
-        username: username, // Enviamos el username para que PHP pueda buscar el ID
-        type: type // 'COMPRA' o 'ALQUILER'
+        username: username,
+        type: type
     };
 
-    // 💡 CAMBIAMOS LA RUTA A server/menu.php
     fetch("../server/menu.php", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,11 +55,9 @@ function handleTransaction(bookId, type) {
     .then(res => res.json())
     .then(data => {
         if (data.status === "ok") {
-            // Mostrar mensaje de éxito y cerrar modal
             alert(`¡Transacción exitosa! ${type === 'COMPRA' ? 'Has comprado' : 'Has alquilado'} ${data.book_name}.`);
             closeBookModal();
         } else {
-            // Mostrar mensaje de error (ej: falta de stock, error DB, etc.)
             alert("Error al realizar la transacción: " + data.message);
         }
     })
@@ -74,75 +71,87 @@ function clickbook(id) {
   fetch("../server/getfront.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id: id }) // CORREGIDO: Enviar el ID como objeto
+    body: JSON.stringify({ id: id })
   })
   .then(res => res.json())
   .then(data => {
     if(data.status === "ok") {
-    const bookId = id; // Guardamos el ID del libro
-    
-    const span = document.createElement('span');
-    span.id = 'bookspan';
-    span.addEventListener('click', () => closeBookModal());
+      const bookId = id;
 
-    const div = document.createElement('div');
-    div.id = 'bookdiv';
-    div.addEventListener('click', e => e.stopPropagation());
+      const existingModal = document.getElementById('bookspan');
+      if(existingModal) existingModal.remove();
 
-    // === BADGE DEL GÉNERO ===
-    const badge = document.createElement('span');
-    badge.className = 'badge';
-    badge.textContent = data.gender;
+      const span = document.createElement('span');
+      span.id = 'bookspan';
+      span.addEventListener('click', () => closeBookModal());
 
-    // === NOMBRE DEL LIBRO ===
-    const nombre = document.createElement('h2');
-    nombre.textContent = data.name;
+      const div = document.createElement('div');
+      div.id = 'bookdiv';
+      div.addEventListener('click', e => e.stopPropagation());
 
-    // === CONTENIDO (IMAGEN + BOTONES) ===
-    const content = document.createElement('div');
-    content.className = 'book-content';
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = data.gender;
 
-    const img = document.createElement('img');
-    img.src = data.url;
+      const nombre = document.createElement('h2');
+      nombre.textContent = data.name;
 
-    // === BOTONES ===
-    const btnContainer = document.createElement('div');
-    btnContainer.className = 'button-container';
+      const content = document.createElement('div');
+      content.className = 'book-content';
 
-    const comprarBtn = document.createElement('button');
-    comprarBtn.className = 'comprar';
-    comprarBtn.textContent = 'Comprar';
-    // 💡 CAMBIO: Llamar a la nueva función con el ID y el tipo
-    comprarBtn.onclick = () => handleTransaction(bookId, 'COMPRA');
+      const img = document.createElement('img');
+      img.src = data.url;
 
-    const alquilarBtn = document.createElement('button');
-    alquilarBtn.className = 'alquilar';
-    alquilarBtn.textContent = 'Alquilar';
-    // 💡 CAMBIO: Llamar a la nueva función con el ID y el tipo
-    alquilarBtn.onclick = () => handleTransaction(bookId, 'ALQUILER');
+      const btnContainer = document.createElement('div');
+      btnContainer.className = 'button-container';
 
-    btnContainer.appendChild(comprarBtn);
-    btnContainer.appendChild(alquilarBtn);
+      const comprarBtn = document.createElement('button');
+      comprarBtn.className = 'comprar';
+      comprarBtn.textContent = 'Comprar';
+      comprarBtn.onclick = () => {
+        handleTransaction(bookId, 'COMPRA');
+        agregarAlCarrito({
+          id: bookId,
+          nombre: data.name,
+          genero: data.gender,
+          imagen: data.url,
+          tipo: "COMPRA"
+        });
+      };
 
-    content.appendChild(img);
-    content.appendChild(btnContainer);
+      const alquilarBtn = document.createElement('button');
+      alquilarBtn.className = 'alquilar';
+      alquilarBtn.textContent = 'Alquilar';
+      alquilarBtn.onclick = () => {
+        handleTransaction(bookId, 'ALQUILER');
+        agregarAlCarrito({
+          id: bookId,
+          nombre: data.name,
+          genero: data.gender,
+          imagen: data.url,
+          tipo: "ALQUILER"
+        });
+      };
 
-    div.appendChild(badge);
-    div.appendChild(nombre);
-    div.appendChild(content);
+      btnContainer.appendChild(comprarBtn);
+      btnContainer.appendChild(alquilarBtn);
 
-    span.appendChild(div);
-    document.body.appendChild(span);
+      content.appendChild(img);
+      content.appendChild(btnContainer);
 
-    // Animación de entrada
-    div.style.animation = 'moveleft 0.5s ease-out forwards';
+      div.appendChild(badge);
+      div.appendChild(nombre);
+      div.appendChild(content);
 
-    } else {
-      alert("Error: " + data.message);
+      span.appendChild(div);
+      document.body.appendChild(span);
+
+      div.style.animation = 'moveleft 0.5s ease-out forwards';
     }
   })
-  .catch(err => console.error("Error en fetch:", err));
+  .catch(err => console.error("Error al obtener el libro:", err));
 }
+
 function selectgender(){
   const select = document.getElementById("genero");
 
@@ -159,6 +168,7 @@ function selectgender(){
     })
     .catch(err => alert("Error: " + err));
 }
+
 function selectorder(){
   const select = document.getElementById("orden")
   const buttons = document.querySelectorAll('.bookcontainer')
@@ -181,11 +191,13 @@ function closeBookModal() {
 function removeCookie(name) {
   document.cookie = `${name}=; path=/; max-age=0;`;
 }
+
 function logout(){
   removeCookie("user")
   removeCookie("password")
   window.location.href = "../php/index.html";
 }
+
 function redirect(){
   const user = document.cookie
   .split('; ')
@@ -209,24 +221,21 @@ function userconfig(){
   });
 
   document.addEventListener('click', (e) => {
-  if (!userBtn.contains(e.target) && !dropdown.contains(e.target)) {
-    dropdown.style.display = 'none';
-    userBtn.setAttribute('aria-expanded', false);
-  }
+    if (!userBtn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+      userBtn.setAttribute('aria-expanded', false);
+    }
   });
 }
 
-// Muestra el contenedor gris de confirmación
 function showDeleteConfirm() {
     document.getElementById('deleteConfirm').style.display = 'flex';
 }
 
-// Cierra el modal
 function closeConfirm() {
     document.getElementById('deleteConfirm').style.display = 'none';
 }
 
-// Ejecuta la eliminación
 function confirmDelete() {
     fetch('../server/delete.php', {
         method: 'POST'
@@ -235,59 +244,169 @@ function confirmDelete() {
     .then(data => {
         alert(data.message);
         if (data.message.includes("correctamente")) {
-            // Redirigir al login o inicio
             window.location.href = "../php/index.html";
         }
     })
     .catch(err => alert("Error: " + err));
 }
 
+function agregarAlCarrito(libro) {
+  let carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];
+
+  const existe = carrito.some(item => item.id === libro.id && item.tipo === libro.tipo);
+  if (existe) {
+    alert("Este libro ya está en el carrito.");
+    return;
+  }
+
+  carrito.push(libro);
+  localStorage.setItem("carritoLibros", JSON.stringify(carrito));
+
+  actualizarBadgeCarrito();
+  alert(`"${libro.nombre}" agregado al carrito (${libro.tipo}).`);
+}
+
 function verCarrito() {
-    const modal = document.getElementById('carritoModal');
-    const content = modal.querySelector('.carrito-content');
-    content.innerHTML = '';
+  const modal = document.getElementById('carritoModal');
+  const content = modal.querySelector('.carrito-content');
+  content.style.maxWidth = '600px';
+  content.style.width = '100%';
+  content.innerHTML = '';
 
-    // Simulación de libros en carrito (puedes reemplazarlo con fetch de tu DB)
-    const carrito = [
-        {nombre: "Minecraft", estado: "comprado", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoADxMkbl8qh15FHha80LiFcfD9KHialDciA&s"},
-        {nombre: "Harry Potter", estado: "alquilado", imagen: "https://via.placeholder.com/150x200?text=Harry+Potter"}
-    ];
+  const carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(carrito.length / itemsPerPage);
 
-   carrito.forEach(libro => {
-    const card = document.createElement('div');
-    card.classList.add('carrito-card');
+  if (carrito.length === 0) {
+    content.innerHTML = "<p class='vacio'>Tu carrito está vacío.</p>";
+  } else {
+    // Create tab container
+    const tabContainer = document.createElement('div');
+    tabContainer.className = 'tab-container';
+    tabContainer.style.display = 'flex';
+    tabContainer.style.justifyContent = 'center';
+    tabContainer.style.marginBottom = '15px';
+    tabContainer.style.padding = '10px 0';
+    tabContainer.style.width = '100%';
+    content.appendChild(tabContainer);
 
-    // NOMBRE ARRIBA
-    const title = document.createElement('p');
-    title.innerText = libro.nombre;
-    title.classList.add('carrito-title'); // clase para estilo
-    card.appendChild(title);
+    // Create book container for the current page
+    const bookContainer = document.createElement('div');
+    bookContainer.className = 'book-container';
+    bookContainer.style.display = 'flex';
+    bookContainer.style.flexDirection = 'row';
+    bookContainer.style.justifyContent = 'center';
+    bookContainer.style.gap = '10px';
+    bookContainer.style.width = '100%';
+    bookContainer.style.flexWrap = 'wrap';
+    content.appendChild(bookContainer);
 
-    // IMAGEN EN MEDIO
-    const img = document.createElement('img');
-    img.src = libro.imagen;
-    card.appendChild(img);
+    // Function to render books for a specific page
+    function renderPage(page) {
+      bookContainer.innerHTML = '';
+      const start = page * itemsPerPage;
+      const end = Math.min(start + itemsPerPage, carrito.length);
 
-    // INSIGNIA ABAJO
-    const badge = document.createElement('div');
-    badge.classList.add('badge-status');
-    badge.classList.add(libro.estado === 'comprado' ? 'badge-comprado' : 'badge-alquilado');
-    badge.innerText = libro.estado === 'comprado' ? 'Comprado' : 'Alquilado';
-    badge.classList.add('badge-bottom'); // clase para estilo
-    card.appendChild(badge);
+      for (let i = start; i < end; i++) {
+        const item = carrito[i];
+        const card = document.createElement('div');
+        card.classList.add('carrito-card');
+        card.style.width = '180px';
+        card.style.minWidth = '150px';
+        card.style.textAlign = 'center';
+        card.style.padding = '10px';
+        card.style.boxSizing = 'border-box';
 
-    content.appendChild(card);
-});
+        const title = document.createElement('p');
+        title.textContent = item.nombre;
+        title.classList.add('carrito-title');
+        title.style.fontSize = '14px';
+        title.style.marginBottom = '8px';
+        card.appendChild(title);
 
-    modal.style.display = 'flex';
+        const img = document.createElement('img');
+        img.src = item.imagen;
+        img.style.width = '100px';
+        img.style.height = '150px';
+        img.style.objectFit = 'cover';
+        img.style.marginBottom = '8px';
+        img.style.display = 'block';
+        img.style.marginLeft = 'auto';
+        img.style.marginRight = 'auto';
+        card.appendChild(img);
+
+        const genreBadge = document.createElement('span');
+        genreBadge.classList.add('badge');
+        genreBadge.textContent = item.genero;
+        genreBadge.style.fontSize = '12px';
+        genreBadge.style.padding = '4px 8px';
+        genreBadge.style.marginBottom = '8px';
+        card.appendChild(genreBadge);
+
+        const badge = document.createElement('span');
+        badge.classList.add('badge-status');
+        badge.classList.add(item.tipo === 'COMPRA' ? 'badge-comprado' : 'badge-alquilado');
+        badge.textContent = item.tipo === 'COMPRA' ? 'Comprado' : 'Alquilado';
+        badge.style.fontSize = '12px';
+        badge.style.padding = '4px 8px';
+        card.appendChild(badge);
+
+        bookContainer.appendChild(card);
+      }
+    }
+
+    // Create tabs
+    for (let i = 0; i < totalPages; i++) {
+      const tab = document.createElement('button');
+      tab.className = 'tab-button';
+      tab.textContent = i + 1;
+      tab.style.margin = '0 8px';
+      tab.style.padding = '8px 12px';
+      tab.style.cursor = 'pointer';
+      tab.style.backgroundColor = i === 0 ? '#007bff' : '#f0f0f0';
+      tab.style.color = i === 0 ? '#fff' : '#000';
+      tab.style.border = '1px solid #ccc';
+      tab.style.borderRadius = '5px';
+      tab.style.fontSize = '16px';
+      tab.style.transition = 'background-color 0.3s, color 0.3s';
+      tab.style.minWidth = '40px';
+      tab.style.textAlign = 'center';
+
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.style.backgroundColor = '#f0f0f0';
+          btn.style.color = '#000';
+        });
+        tab.style.backgroundColor = '#007bff';
+        tab.style.color = '#fff';
+        renderPage(i);
+      });
+
+      tabContainer.appendChild(tab);
+    }
+
+    // Render the first page
+    renderPage(0);
+  }
+
+  modal.style.display = 'flex';
+}
+
+function actualizarBadgeCarrito() {
+  const carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];
+  const badge = document.getElementById('carritoBadge');
+  if (badge) badge.textContent = carrito.length;
+}
+
+function vaciarCarrito() {
+  localStorage.removeItem("carritoLibros");
+  actualizarBadgeCarrito();
+  alert("Carrito vaciado.");
 }
 
 function cerrarCarrito() {
     document.getElementById('carritoModal').style.display = 'none';
 }
-// ==================================================================
-// ================== Portadas de los libros ========================
-// ==================================================================
 
 function loadBooks() {
   fetch('../server/fronts.php')
@@ -309,7 +428,6 @@ function loadBooks() {
       book.sort((b, a) => a.name.localeCompare(b.name))
 
     for(i=0; i<data.count; i++){
-
       const button = document.createElement("button")
       button.setAttribute("onclick", `clickbook(${book[i].id})`);
       button.className = "bookcontainer"

@@ -73,3 +73,33 @@ body{
 .AskButton:hover{
     text-decoration: underline;
 }
+
+/* Mensaje de error: texto rojo con borde blanco (usando text-shadow) */
+.mensaje-error {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 4px;
+    text-shadow:
+       -1px -1px 0 white,
+        1px -1px 0 white,
+       -1px  1px 0 white,
+        1px  1px 0 white;
+}
+
+/* Mensaje de éxito: texto verde con borde blanco */
+.mensaje-exito {
+    color: green;
+    font-size: 0.8em;
+    margin-top: 4px;
+    text-shadow:
+       -1px -1px 0 white,
+        1px -1px 0 white,
+       -1px  1px 0 white,
+        1px  1px 0 white;
+}
+
+/* Para que el contenedor no se mueva al aparecer o desaparecer el mensaje */
+#mensajeResultado {
+    min-height: 24px;
+}
+

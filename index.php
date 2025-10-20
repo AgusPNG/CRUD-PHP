@@ -1,3 +1,3 @@
 <?php
-header("refresh:5;url=php/register.html");
+header("refresh:0;url=php/index.html");
 ?>

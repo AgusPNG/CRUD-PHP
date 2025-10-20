@@ -31,6 +31,18 @@ function searchname(input){
     })
     .catch(err => alert("Error: " + err));
 }
+function returnstock(){
+  fetch('../server/getdate.php', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user: getCookie("user") }) // CORREGIDO: Enviar el ID como objeto
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+  })
+  .catch(err => alert("Error: " + err));
+}
 
 // 💡 NUEVA FUNCIÓN PARA MANEJAR COMPRA/ALQUILER
 function handleTransaction(bookId, type) {

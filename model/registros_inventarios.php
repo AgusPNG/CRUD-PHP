@@ -14,6 +14,27 @@ function get_user_id_by_username($username) {
 
     return $user_id ?: null;
 }
+function getBookIds($id) {
+    include("conexion.php");
+    $stmt = $Conexion->prepare("SELECT ID_LIBRO,FECHA_DEVOLUCION FROM historial WHERE ID_USUARIO = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($bookId,$date);
+    $stmt->fetch();
+
+    $result = [];
+    while ($stmt->fetch()) {
+        $result[] = [
+            "ID_LIBRO" => $bookId,
+            "FECHA_DEVOLUCION" => $date
+        ];
+    }
+    $stmt->close();
+    $Conexion->close();
+
+    return $result ?: null;
+}
 
 // ✅ Registrar operación en historial y descontar stock
 function historial($userId, $bookId, $type) {

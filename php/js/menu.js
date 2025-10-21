@@ -12,8 +12,9 @@ window.onpageshow = function(e) {
 
 function init(){
   redirect()
-  userconfig()
   loadBooks()
+  userconfig()
+  returnstock()
   const input = document.getElementById("searchname")
     input.addEventListener('input', () => {searchname(input)})
 }
@@ -31,15 +32,41 @@ function searchname(input){
     })
     .catch(err => alert("Error: " + err));
 }
+function getCurrentDateTime() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 function returnstock(){
   fetch('../server/getdate.php', {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user: getCookie("user") }) // CORREGIDO: Enviar el ID como objeto
+    body: JSON.stringify({user: getCookie("user")})
   })
   .then(response => response.json())
   .then(data => {
-    console.log(data)
+    if(data.book != null){
+      for(i=0; i<data.book.length; i++){
+        if(getCurrentDateTime() > data.book[i].date){
+          alert(`La fecha de devolución para el libro "${data.book[i].name}" ah caducado. Stock devuelto`)
+          fetch('../server/returnstock.php', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({bookId: data.book[i].bookId, historicId: data.book[i].historicId})
+          });
+        }
+      }
+    }
+    console.log(data.book)
   })
   .catch(err => alert("Error: " + err));
 }

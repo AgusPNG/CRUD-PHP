@@ -14,20 +14,21 @@ function get_user_id_by_username($username) {
 
     return $user_id ?: null;
 }
-function getBookIds($id) {
+function getBookDate($id) {
     include("conexion.php");
-    $stmt = $Conexion->prepare("SELECT ID_LIBRO,FECHA_DEVOLUCION FROM historial WHERE ID_USUARIO = ?");
+    $stmt = $Conexion->prepare("SELECT h.ID_LIBRO, h.FECHA_DEVOLUCION, l.NOMBRE, h.ID_HISTORIAL FROM historial h JOIN libros l ON h.ID_LIBRO = l.ID WHERE h.ID_USUARIO = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($bookId,$date);
-    $stmt->fetch();
+    $stmt->bind_result($bookId,$date,$name,$historicId);
 
     $result = [];
     while ($stmt->fetch()) {
         $result[] = [
-            "ID_LIBRO" => $bookId,
-            "FECHA_DEVOLUCION" => $date
+            "bookId" => $bookId,
+            "date" => $date,
+            "name" => $name,
+            "historicId" => $historicId
         ];
     }
     $stmt->close();
@@ -35,7 +36,21 @@ function getBookIds($id) {
 
     return $result ?: null;
 }
+function returnStock($historicId, $bookId) {
+    include("conexion.php");
 
+    $stmt = $Conexion->prepare("DELETE FROM historial WHERE ID_HISTORIAL = ? AND ID_LIBRO = ?");
+    $stmt->bind_param("ii", $historicId, $bookId);
+    $stmt->execute();
+    $stmt->close();
+
+    $stmt = $Conexion->prepare("UPDATE libros SET STOCK = STOCK + 1 WHERE ID = ?");
+    $stmt->bind_param("i", $bookId);
+    $stmt->execute();
+    $stmt->close();
+
+    $Conexion->close();
+}
 // ✅ Registrar operación en historial y descontar stock
 function historial($userId, $bookId, $type) {
     include("conexion.php");
@@ -58,8 +73,8 @@ function historial($userId, $bookId, $type) {
     $stmt->close();
 
     // Descontar stock inmediatamente
-    $Conexion->query("UPDATE libros SET STOCK = STOCK - 1 WHERE ID=$bookId AND STOCK > 0");
-    $Conexion->query("UPDATE inventario SET STOCK = STOCK - 1 WHERE ID_LIBRO=$bookId AND STOCK > 0");
+    $Conexion->query("UPDATE libros SET STOCK = STOCK - 1 WHERE ID = $bookId AND STOCK > 0");
+    $Conexion->query("UPDATE inventario SET STOCK = STOCK - 1 WHERE ID_LIBRO = $bookId AND STOCK > 0");
 
     $Conexion->close();
     return ["success" => true];

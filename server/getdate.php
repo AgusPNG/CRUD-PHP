@@ -11,6 +11,6 @@ $bookids = getBookDate($id);
 
 echo json_encode([
     "userId" => $id,
-    "book" => $bookids
+    "historic" => $bookids
 ]);
 ?>

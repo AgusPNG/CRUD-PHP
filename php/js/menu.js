@@ -19,18 +19,20 @@ function init(){
     input.addEventListener('input', () => {searchname(input)})
 }
 function searchname(input){
-  fetch('../server/fronts.php')
-    .then(response => response.json())
-    .then(data => {
-      for (let i = 1; i <= data.count; i++) {
+  const bookCookie = getCookie("book")
+  const book = JSON.parse(bookCookie)
+  console.log(book)
+  let i = 0
+  while(true){
+    if(book[i] == undefined)
+      break
         const book = document.querySelector(`[data-id="${i}"]`);
         if (book.textContent.includes(input.value.toUpperCase()))
           book.style.display = "inline-block"
         else
           book.style.display = "none"
-      }
-    })
-    .catch(err => alert("Error: " + err));
+        i++
+    }
 }
 function getCurrentDateTime() {
   const now = new Date();
@@ -54,19 +56,19 @@ function returnstock(){
   })
   .then(response => response.json())
   .then(data => {
-    if(data.book != null){
-      for(i=0; i<data.book.length; i++){
-        if(getCurrentDateTime() > data.book[i].date){
-          alert(`La fecha de devolución para el libro "${data.book[i].name}" ah caducado. Stock devuelto`)
+    if(data.historic != null){
+      for(i=0; i<data.historic.length; i++){
+        if(getCurrentDateTime() > data.historic[i].date){
+          alert(`La fecha de devolución para el libro "${data.historic[i].name}" ah caducado. Stock devuelto`)
           fetch('../server/returnstock.php', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({bookId: data.book[i].bookId, historicId: data.book[i].historicId})
+            body: JSON.stringify({bookId: data.historic[i].bookId, historicId: data.historic[i].historicId})
           });
         }
       }
     }
-    console.log(data.book)
+    console.log(data.historic)
   })
   .catch(err => alert("Error: " + err));
 }
@@ -450,10 +452,10 @@ function cerrarCarrito() {
 }
 
 function loadBooks() {
+  let book = []
   fetch('../server/fronts.php')
   .then(response => response.json())
   .then(data => {
-    let book = []
     for(i=0; i<data.count; i++){
       book.push({
         id: data.id[i],
@@ -462,13 +464,26 @@ function loadBooks() {
         gender: data.gender[i]
       })
     }
+    const bookString = JSON.stringify(book);
+    document.cookie = `book=${encodeURIComponent(bookString)}; max-age=3600; path=/`;
+    showBooks(book)
+  })
+  .catch(error => {
+    console.error('Error al hacer fetch:', error);
+  });
+
     const select = document.getElementById("orden")
     if(select.value == "a-z")
       book.sort((a, b) => a.name.localeCompare(b.name))
     else if(select.value == "z-a")
       book.sort((b, a) => a.name.localeCompare(b.name))
+}
+function showBooks(book){
+  let i = 0
+  while (true){
+      if(book[i] == undefined)
+        break
 
-    for(i=0; i<data.count; i++){
       const button = document.createElement("button")
       button.setAttribute("onclick", `clickbook(${book[i].id})`);
       button.className = "bookcontainer"
@@ -491,17 +506,15 @@ function loadBooks() {
         if (word.length > longestWord) longestWord = word.length;
 
       if (title.length <= 20 && longestWord <= 10)
-        p.style.fontSize = "34px";
+        p.style.fontSize = "1em";
       else 
-        p.style.fontSize = "28px";
+        p.style.fontSize = "1em";
 
       const container = document.querySelector(".bookstorage")
       button.appendChild(img)
       button.appendChild(p)
       container.appendChild(button)
+
+      i++
     }
-  })
-  .catch(error => {
-    console.error('Error al hacer fetch:', error);
-  });
 }

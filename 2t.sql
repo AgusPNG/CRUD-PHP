@@ -146,7 +146,7 @@ INSERT INTO `libros` (`NOMBRE`, `ID`, `GENERO`, `IMG`, `STOCK`) VALUES
 
 CREATE TABLE `usuario` (
   `ID` int(11) NOT NULL,
-  `clave` varchar(25) NOT NULL,
+  `clave` varchar(255) NOT NULL,
   `usuario` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

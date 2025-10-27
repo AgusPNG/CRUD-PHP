@@ -47,7 +47,6 @@ function getCurrentDateTime() {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
-
 function returnstock(){
   fetch('../server/getdate.php', {
     method: "POST",
@@ -57,18 +56,36 @@ function returnstock(){
   .then(response => response.json())
   .then(data => {
     if(data.historic != null){
-      for(i=0; i<data.historic.length; i++){
-        if(getCurrentDateTime() > data.historic[i].date){
-          alert(`La fecha de devolución para el libro "${data.historic[i].name}" ah caducado. Stock devuelto`)
+      let carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];
+
+      for(let i=0; i<data.historic.length; i++){
+        const historicItem = data.historic[i];
+
+        // Verificar si ya no está en el carrito (ya devuelto manualmente)
+        const pendiente = carrito.some(item => item.id == historicItem.bookId && item.tipo === 'ALQUILER');
+        if(!pendiente) continue; // ya se devolvió, no hacer nada
+
+        if(getCurrentDateTime() > historicItem.date){
+          alert(`La fecha de devolución para el libro "${historicItem.name}" ha caducado. Stock devuelto.`)
+          
+          // Quitar del historial en DB
           fetch('../server/returnstock.php', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({bookId: data.historic[i].bookId, historicId: data.historic[i].historicId})
+            body: JSON.stringify({
+              bookId: historicItem.bookId, 
+              historicId: historicItem.historicId
+            })
           });
+
+          // Quitar del carrito
+          carrito = carrito.filter(item => !(item.id == historicItem.bookId && item.tipo === 'ALQUILER'));
         }
       }
+
+      localStorage.setItem("carritoLibros", JSON.stringify(carrito));
+      actualizarBadgeCarrito();
     }
-    console.log(data.historic)
   })
   .catch(err => alert("Error: " + err));
 }
@@ -310,13 +327,14 @@ function agregarAlCarrito(libro) {
 }
 
 function verCarrito() {
+  returnstock(); // Revisa devoluciones antes de mostrar
   const modal = document.getElementById('carritoModal');
   const content = modal.querySelector('.carrito-content');
   content.style.maxWidth = '600px';
   content.style.width = '100%';
   content.innerHTML = '';
 
-  const carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];
+  let carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];
   const itemsPerPage = 3;
   const totalPages = Math.ceil(carrito.length / itemsPerPage);
 
@@ -344,8 +362,10 @@ function verCarrito() {
     bookContainer.style.flexWrap = 'wrap';
     content.appendChild(bookContainer);
 
-    // Function to render books for a specific page
+    let currentPage = 0;
+
     function renderPage(page) {
+      currentPage = page;
       bookContainer.innerHTML = '';
       const start = page * itemsPerPage;
       const end = Math.min(start + itemsPerPage, carrito.length);
@@ -393,6 +413,34 @@ function verCarrito() {
         badge.style.fontSize = '12px';
         badge.style.padding = '4px 8px';
         card.appendChild(badge);
+ 
+ if (item.tipo === 'ALQUILER') {
+  const devolverBtn = document.createElement('button');
+  devolverBtn.textContent = 'Devolver';
+  devolverBtn.classList.add('btn-devolver'); // <- aquí se asigna la clase
+  devolverBtn.style.marginTop = '8px';
+  devolverBtn.onclick = () => {
+    fetch('../server/returnstock.php', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        bookId: item.id,
+        historicId: item.historicId
+      })
+    }).then(() => {
+      carrito = carrito.filter(i => !(i.id === item.id && i.tipo === 'ALQUILER'));
+      localStorage.setItem("carritoLibros", JSON.stringify(carrito));
+      actualizarBadgeCarrito();
+      renderPage(currentPage);
+      alert(`Libro "${item.nombre}" devuelto.`);
+    }).catch(err => {
+      console.error(err);
+      alert("Error al devolver el libro.");
+    });
+  };
+  card.appendChild(devolverBtn);
+}
+
 
         bookContainer.appendChild(card);
       }
@@ -428,12 +476,13 @@ function verCarrito() {
       tabContainer.appendChild(tab);
     }
 
-    // Render the first page
     renderPage(0);
   }
 
   modal.style.display = 'flex';
 }
+
+
 
 function actualizarBadgeCarrito() {
   const carrito = JSON.parse(localStorage.getItem("carritoLibros")) || [];

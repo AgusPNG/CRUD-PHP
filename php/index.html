@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinto Libros - Login</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <form class="Logbox" onsubmit="login(event)" method="POST" enctype="multipart/form-data">
+        <p class="indtitle">Iniciar Sesion</p>
+        <input type="text" name="usuario" id="user" class="indform" placeholder="Usuario">
+        <input type="password" name="contraseña" id="password" class="indform" placeholder="Contraseña">
+        <button type="submit" class="indbutton">Iniciar Sesion</button>
+        <div class="Askdiv">
+            <h5>¿No tenés cuenta?</h5>
+            <a class="AskButton" href="../php/register.html">Crea una</a>
+        </div>
+    </form>
+    <script src="../php/js/login.js"></script>
+</body>
+</html>

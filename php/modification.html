@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Modificar Contraseña</title>
+    <link rel="stylesheet" href="css/modification.css" />
+</head>
+<body>
+    <form id="formModificacion" class="mainbox" method="POST" enctype="multipart/form-data">
+        <p class="indtitle">Modificar Contraseña</p>
+
+        <input 
+            type="password" 
+            name="contraseñaActual" 
+            id="contraseñaActual" 
+            class="indform" 
+            placeholder="Contraseña Actual" 
+            required
+        >
+        <div id="mensajeResultado"></div>
+
+        <input 
+            type="password" 
+            name="nuevaContraseña" 
+            id="nuevaContraseña" 
+            class="indform" 
+            placeholder="Nueva Contraseña" 
+            required
+        >
+
+        <button type="submit" class="indbutton">Modificar</button>
+        <a class="AskButton" href="../php/menu.html">Volver al Menu</a>
+    </form>
+
+    <script>
+        const form = document.getElementById('formModificacion');
+        const mensajeDiv = document.getElementById('mensajeResultado');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            fetch('../server/modification.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                mensajeDiv.textContent = data.mensaje;
+                mensajeDiv.classList.remove('mensaje-error', 'mensaje-exito');
+                if (data.mensaje=="La contraseña actual es incorrecta.")
+            {
+                mensajeDiv.classList.add(data.exito ? 'mensaje-error' : 'mensaje-exito');
+            }
+            else if (data.mensaje=="Contraseña modificada correctamente.")
+            {
+                mensajeDiv.classList.add(data.exito ? 'mensaje-exito' : 'mensaje-error');
+            }
+                
+            })
+            .catch(err => {
+                mensajeDiv.textContent = 'Error al procesar la solicitud.';
+                mensajeDiv.classList.remove('mensaje-error', 'mensaje-exito');
+                mensajeDiv.classList.add('mensaje-error');
+            });
+        });
+    </script>
+</body>
+</html>

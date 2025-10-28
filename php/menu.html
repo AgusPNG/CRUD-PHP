@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinto Libros - Menú</title>
+    <link rel="stylesheet" href="../php/css/menu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body onload="init()">
+    <div class="user-menu-container">
+        <div class="user-general">
+            <p class="username">Usuario</p>
+            <button class="user-icon-btn" id="userBtn" aria-expanded="false" aria-controls="dropdownMenu">
+            <img src="../php/css/img/user.png" alt="Usuario">
+            </button>
+        </div>
+        <ul class="dropdown-menu" id="dropdownMenu" role="menu"> 
+
+        <li>
+            <a class="dropdown-item" href="#" onclick="verCarrito()">
+                <i class="fas fa-shopping-cart"></i> Ver carrito
+            </a>
+        </li>
+        <li class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" href="../php/modification.html">
+                <i class="fas fa-key"></i> Modificar contraseña
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" onclick="showDeleteConfirm()">
+                <i class="fas fa-trash-alt"></i> Eliminar cuenta
+            </a>
+        </li>
+        <li class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </a>
+        </li>
+        </ul>    
+    </div>
+
+
+    <div id="carritoModal" class="confirm-overlay" style="display: none;">
+    <div id="carritoDiv">
+        <h2>Mis Productos</h2>
+        <div class="carrito-content">
+            <!-- Aquí se agregarán los libros dinámicamente -->
+        </div>
+        <div class="button-container">
+            <button onclick="cerrarCarrito()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div id="deleteConfirm" class="confirm-overlay" style="display: none;">
+        <div class="confirm-box">
+            <h2>¿Deseas eliminar tu cuenta?</h2>
+            <p>Esta acción no se puede deshacer.</p>
+            <div class="confirm-buttons">
+                <button onclick="confirmDelete()">Sí, eliminar</button>
+                <button onclick="closeConfirm()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <img src="../php/css/img/book.jpg" style="width: 120px; height: 120px;" alt="book" class="start-container"/>
+        <h1 class="start-container">Pinto Libros</h1>
+        <p style="color: rgb(200, 200, 200);">Alquila o compra libros</p>
+    </div>
+    <div class="forms">
+      <input type="text" name="nombre_libro" id="searchname" class="indform" placeholder="Nombre del Libro">
+
+    <select onchange="reloadfilters()" name="genero" id="gender" style="margin-left: 0.5%; margin-right: 0.5%;" class="indselect">
+        <option value="todos_los_generos">Todos los Géneros</option>
+        <option value="RELIGIÓN">Religión</option>
+        <option value="INFANTIL">Infantil</option>
+        <option value="BIOGRAFÍA">Biografía</option>
+        <option value="FANTASÍA">Fantasía</option>
+        <option value="TERROR">Terror</option>
+        <option value="MEDICINA">Medicina</option>
+        <option value="NOVELA">Novela</option>
+        <option value="CIENCIA FICCIÓN">Ciencia ficción</option>
+        <option value="COMEDIA">Comedia</option>
+        <option value="DRAMA">Drama</option>
+    </select>
+
+    <select onchange="reloadfilters()" name="orden" id="order" class="indselect">
+            <option value="a-z"> A - Z</option>
+            <option value="z-a"> Z - A</option>
+            <option value="stock"> Más stock</option>
+            <option value="stock"> Menos stock</option>
+    </select>
+    </div>
+    <div id="libros-container"></div>
+    <div class="bookstorage">
+    </div>
+
+    <script src="js/menu.js"></script>
+</body>
+</html>

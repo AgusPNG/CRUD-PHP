@@ -14,9 +14,9 @@ let inputG
 
 function init(){
   redirect()
-  loadBooks()
-  userconfig()
   returnstock()
+  //loadBooks()
+  userconfig()
   
   inputG = document.getElementById("searchname")
   inputG.addEventListener('input', reloadfilters)
@@ -75,7 +75,7 @@ function returnstock(){
 
         if(getCurrentDateTime() > historicItem.date){
           alert(`La fecha de devolución para el libro "${historicItem.name}" ha caducado. Stock devuelto.`)
-          
+
           // Quitar del historial en DB
           fetch('../server/returnstock.php', {
             method: "POST",
@@ -84,8 +84,7 @@ function returnstock(){
               bookId: historicItem.bookId, 
               historicId: historicItem.historicId
             })
-          });
-
+          })
           // Quitar del carrito
           carrito = carrito.filter(item => !(item.id == historicItem.bookId && item.tipo === 'ALQUILER'));
         }
@@ -94,6 +93,7 @@ function returnstock(){
       localStorage.setItem("carritoLibros", JSON.stringify(carrito));
       actualizarBadgeCarrito();
     }
+    loadBooks()
   })
   .catch(err => alert("Error: " + err));
 }
@@ -125,6 +125,9 @@ function handleTransaction(bookId, type) {
             // Mostrar mensaje de éxito y cerrar modal
             alert(`¡Transacción exitosa! ${type === 'COMPRA' ? 'Has comprado' : 'Has alquilado'} ${data.book_name}.`);
             closeBookModal();
+            const buttons = document.querySelectorAll('.bookcontainer')
+            buttons.forEach(button => button.remove())
+            loadBooks()
         } else {
             // Mostrar mensaje de error (ej: falta de stock, error DB, etc.)
             alert("Error al realizar la transacción: " + data.message);
@@ -157,6 +160,8 @@ function clickbook(id) {
       const div = document.createElement('div');
       div.id = 'bookdiv';
       div.addEventListener('click', e => e.stopPropagation());
+      if(data.stock == 0)
+        div.style.backgroundImage = 'url("css/img/wood_bw.png")';
 
       const badge = document.createElement('span');
       badge.className = 'badge';
@@ -423,6 +428,7 @@ function verCarrito() {
       actualizarBadgeCarrito();
       renderPage(currentPage);
       alert(`Libro "${item.nombre}" devuelto.`);
+
     }).catch(err => {
       console.error(err);
       alert("Error al devolver el libro.");
@@ -524,6 +530,8 @@ function showBooks(book){
       button.className = "bookcontainer"
       button.dataset.gender = book[i].gender
       button.dataset.id = book[i].id
+      if(book[i].stock == 0)
+        button.style.backgroundImage = 'url("css/img/wood_bw.png")'
 
       const img = document.createElement("img")
       img.className = "indbook"
